@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Clock</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #f0eeea;
+    --border: rgba(0,0,0,0.10);
+    --border-strong: rgba(0,0,0,0.18);
+    --text: #1a1a1a;
+    --text2: #666;
+    --text3: #999;
+    --work-bg: #E6F1FB;
+    --work-border: #B5D4F4;
+    --work-text: #0C447C;
+    --work-ap: #185FA5;
+    --cur-bg: #FAEEDA;
+    --cur-border: #EF9F27;
+    --cur-text: #854F0B;
+    --cur-ap: #BA7517;
+    --radius: 8px;
+    --radius-sm: 5px;
+    --mono: 'SF Mono', 'Menlo', 'Monaco', monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161616;
+      --surface: #1f1f1f;
+      --surface2: #2a2a2a;
+      --border: rgba(255,255,255,0.09);
+      --border-strong: rgba(255,255,255,0.16);
+      --text: #e8e8e8;
+      --text2: #999;
+      --text3: #666;
+      --work-bg: #042C53;
+      --work-border: #0C447C;
+      --work-text: #B5D4F4;
+      --work-ap: #85B7EB;
+      --cur-bg: #412402;
+      --cur-border: #BA7517;
+      --cur-text: #FAC775;
+      --cur-ap: #EF9F27;
+    }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding: 20px 16px 24px;
+  }
+
+  h1.title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text3);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  #mz-scroll {
+    overflow-x: auto;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+  #mz-scroll::-webkit-scrollbar { height: 3px; }
+  #mz-scroll::-webkit-scrollbar-track { background: transparent; }
+  #mz-scroll::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+
+  #mz-grid {
+    display: grid;
+    grid-template-columns: 148px repeat(24, 40px);
+    gap: 2px;
+    row-gap: 4px;
+    min-width: max-content;
+  }
+
+  .mz-sep {
+    grid-column: 1 / -1;
+    height: 1px;
+    background: var(--border);
+    margin: 3px 0;
+  }
+
+  /* Info cell */
+  .ic {
+    background: var(--surface);
+    border: 0.5px solid var(--border-strong);
+    border-radius: var(--radius);
+    padding: 7px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1px;
+  }
+  .ic.home-row { border-color: var(--border-strong); }
+  .ic-name { font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ic-meta { font-size: 10px; color: var(--text2); font-family: var(--mono); display: flex; align-items: center; gap: 5px; margin-top: 1px; }
+  .ic-offset { background: var(--surface2); border-radius: 3px; padding: 0 4px; font-size: 10px; color: var(--text2); }
+  .ic-time { font-size: 15px; font-family: var(--mono); font-weight: 500; color: var(--text); margin-top: 3px; }
+
+  /* Tiles */
+  .tile {
+    border-radius: var(--radius-sm);
+    border: 0.5px solid var(--border);
+    padding: 6px 2px 5px;
+    text-align: center;
+    background: var(--surface2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+  }
+  .tile.night { opacity: 0.4; }
+  .tile.work  { background: var(--work-bg); border-color: var(--work-border); }
+  .tile.cur   { background: var(--cur-bg);  border-color: var(--cur-border); opacity: 1 !important; }
+
+  .tile-h  { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--text); line-height: 1; display: block; }
+  .tile-ap { font-size: 9px; color: var(--text3); margin-top: 3px; display: block; letter-spacing: 0.03em; }
+
+  .tile.work .tile-h  { color: var(--work-text); }
+  .tile.work .tile-ap { color: var(--work-ap); }
+  .tile.cur  .tile-h  { color: var(--cur-text); }
+  .tile.cur  .tile-ap { color: var(--cur-ap); }
+
+  /* Date badge tile */
+  .tile.date-t { padding: 5px 2px; }
+  .date-mon { font-size: 8px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); display: block; line-height: 1; }
+  .date-day { font-size: 15px; font-weight: 500; color: var(--text); display: block; line-height: 1.2; }
+  .tile.work  .date-mon, .tile.work  .date-day { color: var(--work-text); }
+  .tile.cur   .date-mon, .tile.cur   .date-day { color: var(--cur-text); }
+  .tile.night .date-mon, .tile.night .date-day { color: var(--text2); }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 0.5px solid var(--border);
+  }
+  .leg-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text2); }
+  .leg-sw { width: 18px; height: 9px; border-radius: 2px; border: 0.5px solid; flex-shrink: 0; }
+
+  .updated {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: var(--mono);
+    margin-top: 10px;
+    text-align: right;
+  }
+</style>
+</head>
+<body>
+
+<h1 class="title">World Clock</h1>
+
+<div id="mz-scroll">
+  <div id="mz-grid"></div>
+</div>
+
+<div class="legend">
+  <div class="leg-item">
+    <div class="leg-sw" style="background:#FAEEDA;border-color:#EF9F27;"></div>Current hour
+  </div>
+  <div class="leg-item">
+    <div class="leg-sw" style="background:#E6F1FB;border-color:#B5D4F4;"></div>Business hours (8am–6pm)
+  </div>
+  <div class="leg-item">
+    <div class="leg-sw" style="background:rgba(0,0,0,0.06);border-color:rgba(0,0,0,0.10);opacity:0.6;"></div>Night (10pm–6am)
+  </div>
+  <div class="leg-item">
+    <span style="font-size:10px;font-family:var(--mono);border:0.5px solid rgba(0,0,0,0.18);border-radius:3px;padding:0 4px;color:var(--text2);">APR</span>&nbsp;Midnight / day change
+  </div>
+</div>
+
+<div class="updated" id="updated"></div>
+
+<script>
+(function () {
+  var ZONES = [
+    { tz: 'America/Toronto',     name: 'Toronto',       isHome: true },
+    { tz: 'Australia/Melbourne', name: 'Melbourne',      sep: true   },
+    { tz: 'America/Los_Angeles', name: 'Pacific Time'               },
+    { tz: 'America/Denver',      name: 'Mountain Time'              },
+    { tz: 'America/Chicago',     name: 'Central Time'               },
+    { tz: 'America/New_York',    name: 'Eastern Time'               },
+  ];
+
+  function getUTCOff(tz) {
+    var now = new Date();
+    var u = new Date(now.toLocaleString('en-US', { timeZone: 'UTC' }));
+    var l = new Date(now.toLocaleString('en-US', { timeZone: tz }));
+    return (l - u) / 3600000;
+  }
+
+  function getHour(d, tz) {
+    return parseInt(
+      new Intl.DateTimeFormat('en', { timeZone: tz, hour: 'numeric', hour12: false }).format(d)
+    ) % 24;
+  }
+
+  function getTZAbbr(tz) {
+    var s = new Intl.DateTimeFormat('en', { timeZone: tz, timeZoneName: 'short' }).format(new Date());
+    return (s.split(', ')[1] || '').trim();
+  }
+
+  function fmtShort(d, tz) {
+    var s = new Intl.DateTimeFormat('en', {
+      timeZone: tz, hour: 'numeric', minute: '2-digit', hour12: true
+    }).format(d);
+    return s.replace(' AM', 'a').replace(' PM', 'p').replace(':00', '');
+  }
+
+  function getMonDay(now, dayShift) {
+    var d = new Date(now.getTime() + dayShift * 86400000);
+    var mon = new Intl.DateTimeFormat('en', { month: 'short' }).format(d).toUpperCase();
+    var day = new Intl.DateTimeFormat('en', { day: 'numeric' }).format(d);
+    return { mon: mon, day: day };
+  }
+
+  function render() {
+    var now = new Date();
+    var torOff = getUTCOff('America/Toronto');
+    var curCol = getHour(now, 'America/Toronto');
+    var html = '';
+
+    ZONES.forEach(function (z, zi) {
+      if (z.sep && zi > 0) {
+        html += '<div class="mz-sep" style="grid-column:1/-1;"></div>';
+      }
+
+      var zOff   = getUTCOff(z.tz);
+      var diff   = Math.round(zOff - torOff);
+      var offStr = diff === 0 ? '+0h' : (diff > 0 ? '+' + diff + 'h' : diff + 'h');
+      var abbr   = getTZAbbr(z.tz);
+      var ctime  = fmtShort(now, z.tz);
+      var midCol = ((-diff % 24) + 24) % 24;
+
+      html += '<div class="ic' + (z.isHome ? ' home-row' : '') + '">' +
+        '<div class="ic-name">' + z.name + '</div>' +
+        '<div class="ic-meta">' +
+          '<span class="ic-offset">' + (z.isHome ? 'home' : offStr) + '</span>' + abbr +
+        '</div>' +
+        '<div class="ic-time">' + ctime + '</div>' +
+      '</div>';
+
+      for (var col = 0; col < 24; col++) {
+        var raw    = col + diff;
+        var lh     = ((raw % 24) + 24) % 24;
+        var ds     = raw >= 24 ? 1 : (raw < 0 ? -1 : 0);
+        var isCur  = col === curCol;
+        var isWork = lh >= 8 && lh <= 17;
+        var isNight= lh >= 22 || lh < 6;
+        var isMid  = (col === midCol) && !z.isHome;
+
+        var cls = 'tile';
+        if (isCur)        cls += ' cur';
+        else if (isNight) cls += ' night';
+        else if (isWork)  cls += ' work';
+
+        if (isMid) {
+          cls += ' date-t';
+          var md = getMonDay(now, ds);
+          html += '<div class="' + cls + '">' +
+            '<span class="date-mon">' + md.mon + '</span>' +
+            '<span class="date-day">' + md.day + '</span>' +
+          '</div>';
+        } else {
+          var h12 = lh % 12 || 12;
+          var ap  = lh < 12 ? 'am' : 'pm';
+          html += '<div class="' + cls + '">' +
+            '<span class="tile-h">' + h12 + '</span>' +
+            '<span class="tile-ap">' + ap + '</span>' +
+          '</div>';
+        }
+      }
+    });
+
+    document.getElementById('mz-grid').innerHTML = html;
+
+    var scroll = document.getElementById('mz-scroll');
+    var tileW  = 42;
+    var infoW  = 150;
+    scroll.scrollLeft = infoW + curCol * tileW - scroll.offsetWidth / 2 + tileW / 2;
+
+    document.getElementById('updated').textContent =
+      'Updated ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  render();
+  setInterval(render, 60000);
+})();
+</script>
+</body>
+</html>
