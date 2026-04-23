@@ -191,8 +191,8 @@
 <script>
 (function () {
   var ZONES = [
-    { tz: 'America/Toronto',     name: 'Toronto',       isHome: true },
-    { tz: 'Australia/Melbourne', name: 'Melbourne',      sep: true   },
+    { tz: 'Australia/Melbourne', name: 'Melbourne',      isHome: true },
+    { tz: 'America/Toronto',     name: 'Toronto',        sep: true   },
     { tz: 'America/Los_Angeles', name: 'Pacific Time'               },
     { tz: 'America/Denver',      name: 'Mountain Time'              },
     { tz: 'America/Chicago',     name: 'Central Time'               },
@@ -233,8 +233,8 @@
 
   function render() {
     var now = new Date();
-    var torOff = getUTCOff('America/Toronto');
-    var curCol = getHour(now, 'America/Toronto');
+    var torOff = getUTCOff('Australia/Melbourne');
+    var curCol = getHour(now, 'Australia/Melbourne');
     var html = '';
 
     ZONES.forEach(function (z, zi) {
