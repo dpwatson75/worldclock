@@ -125,6 +125,7 @@
   .tile.night { opacity: 0.4; }
   .tile.work  { background: var(--work-bg); border-color: var(--work-border); }
   .tile.cur   { background: var(--cur-bg);  border-color: var(--cur-border); opacity: 1 !important; }
+  .tile.col-hover { filter: brightness(1.25); border-color: rgba(0,0,0,0.5) !important; box-shadow: 0 0 0 1px rgba(0,0,0,0.18); opacity: 1 !important; position: relative; z-index: 1; }
 
   .tile-h  { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--text); line-height: 1; display: block; }
   .tile-ap { font-size: 9px; color: var(--text3); margin-top: 3px; display: block; letter-spacing: 0.03em; }
@@ -274,14 +275,14 @@
         if (isMid) {
           cls += ' date-t';
           var md = getMonDay(now, ds);
-          html += '<div class="' + cls + '">' +
+          html += '<div class="' + cls + '" data-col="' + col + '">' +
             '<span class="date-mon">' + md.mon + '</span>' +
             '<span class="date-day">' + md.day + '</span>' +
           '</div>';
         } else {
           var h12 = lh % 12 || 12;
           var ap  = lh < 12 ? 'am' : 'pm';
-          html += '<div class="' + cls + '">' +
+          html += '<div class="' + cls + '" data-col="' + col + '">' +
             '<span class="tile-h">' + h12 + '</span>' +
             '<span class="tile-ap">' + ap + '</span>' +
           '</div>';
@@ -302,6 +303,21 @@
 
   render();
   setInterval(render, 60000);
+
+  var grid = document.getElementById('mz-grid');
+  grid.addEventListener('mouseover', function(e) {
+    var tile = e.target.closest('[data-col]');
+    if (!tile) return;
+    var col = tile.dataset.col;
+    if (grid._hovCol === col) return;
+    grid.querySelectorAll('.col-hover').forEach(function(t) { t.classList.remove('col-hover'); });
+    grid.querySelectorAll('[data-col="' + col + '"]').forEach(function(t) { t.classList.add('col-hover'); });
+    grid._hovCol = col;
+  });
+  grid.addEventListener('mouseleave', function() {
+    grid.querySelectorAll('.col-hover').forEach(function(t) { t.classList.remove('col-hover'); });
+    grid._hovCol = null;
+  });
 })();
 </script>
 </body>
