@@ -31,7 +31,7 @@
   }
 
   @media (prefers-color-scheme: dark) {
-    :root {
+    html:not([data-theme="light"]) {
       --bg: #161616;
       --surface: #1f1f1f;
       --surface2: #2a2a2a;
@@ -51,6 +51,25 @@
     }
   }
 
+  html[data-theme="dark"] {
+    --bg: #161616;
+    --surface: #1f1f1f;
+    --surface2: #2a2a2a;
+    --border: rgba(255,255,255,0.09);
+    --border-strong: rgba(255,255,255,0.16);
+    --text: #e8e8e8;
+    --text2: #999;
+    --text3: #666;
+    --work-bg: #042C53;
+    --work-border: #0C447C;
+    --work-text: #B5D4F4;
+    --work-ap: #85B7EB;
+    --cur-bg: #412402;
+    --cur-border: #BA7517;
+    --cur-text: #FAC775;
+    --cur-ap: #EF9F27;
+  }
+
   body {
     background: var(--bg);
     color: var(--text);
@@ -59,14 +78,33 @@
     padding: 20px 16px 24px;
   }
 
+  .title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
   h1.title {
     font-size: 13px;
     font-weight: 500;
     color: var(--text3);
     letter-spacing: 0.07em;
     text-transform: uppercase;
-    margin-bottom: 16px;
+    margin-bottom: 0;
   }
+
+  #theme-toggle {
+    background: var(--surface2);
+    border: 0.5px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--text2);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px 8px;
+    line-height: 1;
+  }
+  #theme-toggle:hover { background: var(--surface); }
 
   #mz-scroll {
     overflow-x: auto;
@@ -169,7 +207,10 @@
 </head>
 <body>
 
-<h1 class="title">World Clock</h1>
+<div class="title-bar">
+  <h1 class="title">World Clock</h1>
+  <button id="theme-toggle">🌙</button>
+</div>
 
 <div id="mz-scroll">
   <div id="mz-grid"></div>
@@ -306,6 +347,26 @@
 
   render();
   setInterval(render, 60000);
+
+  // Theme toggle
+  var themeBtn = document.getElementById('theme-toggle');
+  var savedTheme = localStorage.getItem('wc-theme');
+  if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+  function isDarkActive() {
+    var t = document.documentElement.getAttribute('data-theme');
+    return t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  }
+  function syncBtn() {
+    themeBtn.textContent = isDarkActive() ? '☀️' : '🌙';
+  }
+  themeBtn.addEventListener('click', function() {
+    var next = isDarkActive() ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('wc-theme', next);
+    syncBtn();
+  });
+  syncBtn();
 
   var grid = document.getElementById('mz-grid');
   grid.addEventListener('mouseover', function(e) {
