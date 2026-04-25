@@ -180,10 +180,10 @@
     <div class="leg-sw" style="background:#FAEEDA;border-color:#EF9F27;"></div>Current hour
   </div>
   <div class="leg-item">
-    <div class="leg-sw" style="background:#E6F1FB;border-color:#B5D4F4;"></div>Business hours (8am–6pm)
+    <div class="leg-sw" style="background:#E6F1FB;border-color:#B5D4F4;"></div>Business hours (7am–6pm)
   </div>
   <div class="leg-item">
-    <div class="leg-sw" style="background:rgba(0,0,0,0.06);border-color:rgba(0,0,0,0.10);opacity:0.6;"></div>Night (10pm–6am)
+    <div class="leg-sw" style="background:rgba(0,0,0,0.06);border-color:rgba(0,0,0,0.10);opacity:0.6;"></div>Night (9pm–6am)
   </div>
   <div class="leg-item">
     <span style="font-size:10px;font-family:var(--mono);border:0.5px solid rgba(0,0,0,0.18);border-radius:3px;padding:0 4px;color:var(--text2);">APR</span>&nbsp;Midnight / day change
@@ -266,8 +266,8 @@
         var lh     = ((raw % 24) + 24) % 24;
         var ds     = raw >= 24 ? 1 : (raw < 0 ? -1 : 0);
         var isCur  = col === curCol;
-        var isWork = lh >= 8 && lh <= 17;
-        var isNight= lh >= 22 || lh < 6;
+        var isWork = lh >= 7 && lh <= 17;
+        var isNight= lh >= 21 || lh < 6;
         var isMid  = (col === midCol) && !z.isHome;
 
         var cls = 'tile';
