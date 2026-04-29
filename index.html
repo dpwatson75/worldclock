@@ -213,7 +213,7 @@
 
 <div class="title-bar">
   <h1 class="title">World Clock</h1>
-  <button id="theme-toggle">🌙</button>
+  <button id="theme-toggle">⏰</button>
 </div>
 
 <div id="mz-scroll">
@@ -347,6 +347,8 @@
 
     document.getElementById('updated').textContent =
       'Updated ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    applyTheme();
   }
 
   render();
@@ -359,24 +361,44 @@
     });
   }
 
-  // Theme toggle
+  // Theme: auto (business hours) → light → dark → auto
   var themeBtn = document.getElementById('theme-toggle');
-  var savedTheme = localStorage.getItem('wc-theme');
-  if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
 
-  function isDarkActive() {
-    var t = document.documentElement.getAttribute('data-theme');
-    return t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  function applyTheme() {
+    var saved = localStorage.getItem('wc-theme');
+    if (saved === 'light' || saved === 'dark') {
+      document.documentElement.setAttribute('data-theme', saved);
+    } else {
+      // Auto: Melbourne business hours (7am–6pm) = light, otherwise = dark
+      var h = getHour(new Date(), 'Australia/Melbourne');
+      document.documentElement.setAttribute('data-theme', (h >= 7 && h <= 17) ? 'light' : 'dark');
+    }
   }
+
   function syncBtn() {
-    themeBtn.textContent = isDarkActive() ? '☀️' : '🌙';
+    var saved = localStorage.getItem('wc-theme');
+    if (saved === 'light') {
+      themeBtn.textContent = '☀️';
+      themeBtn.title = 'Light mode — click for dark';
+    } else if (saved === 'dark') {
+      themeBtn.textContent = '🌙';
+      themeBtn.title = 'Dark mode — click for auto';
+    } else {
+      themeBtn.textContent = '⏰';
+      themeBtn.title = 'Auto (business hours) — click for light';
+    }
   }
+
   themeBtn.addEventListener('click', function() {
-    var next = isDarkActive() ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('wc-theme', next);
+    var saved = localStorage.getItem('wc-theme');
+    if (!saved)          { localStorage.setItem('wc-theme', 'light'); }
+    else if (saved === 'light') { localStorage.setItem('wc-theme', 'dark'); }
+    else                 { localStorage.removeItem('wc-theme'); }
+    applyTheme();
     syncBtn();
   });
+
+  applyTheme();
   syncBtn();
 
   var grid = document.getElementById('mz-grid');
