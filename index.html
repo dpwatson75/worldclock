@@ -352,6 +352,13 @@
   render();
   setInterval(render, 60000);
 
+  // Service worker — keeps the home screen app up to date
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').then(function(reg) {
+      reg.update(); // Check for a new SW version every time the app opens
+    });
+  }
+
   // Theme toggle
   var themeBtn = document.getElementById('theme-toggle');
   var savedTheme = localStorage.getItem('wc-theme');
