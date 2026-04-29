@@ -346,27 +346,67 @@
   }
 
   render();
-  setInterval(render, 60000);
+  // Auto theme + minute re-render
+  setInterval(function () {
+    render();
+    if (!localStorage.getItem('wc-theme')) applyAutoTheme();
+  }, 60000);
 
-  // Theme toggle
+  // Theme management
+  var WORK_START = 7;   // 7 am
+  var WORK_END   = 18;  // 6 pm
+
+  function getAutoTheme() {
+    var h = new Date().getHours();
+    return (h >= WORK_START && h < WORK_END) ? 'light' : 'dark';
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  function applyAutoTheme() {
+    applyTheme(getAutoTheme());
+    syncBtn();
+  }
+
   var themeBtn = document.getElementById('theme-toggle');
-  var savedTheme = localStorage.getItem('wc-theme');
-  if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
 
   function isDarkActive() {
-    var t = document.documentElement.getAttribute('data-theme');
-    return t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    return document.documentElement.getAttribute('data-theme') === 'dark';
   }
+
   function syncBtn() {
-    themeBtn.textContent = isDarkActive() ? '☀️' : '🌙';
+    var isAuto = !localStorage.getItem('wc-theme');
+    var dark = isDarkActive();
+    themeBtn.textContent = (dark ? '🌙' : '☀️') + (isAuto ? ' auto' : '');
+    themeBtn.title = isAuto
+      ? 'Auto: light 7am–6pm, dark otherwise — click to override'
+      : 'Manual override — click to restore auto switching';
   }
-  themeBtn.addEventListener('click', function() {
-    var next = isDarkActive() ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('wc-theme', next);
-    syncBtn();
-  });
+
+  // Init
+  var savedTheme = localStorage.getItem('wc-theme');
+  if (savedTheme) {
+    applyTheme(savedTheme);
+  } else {
+    applyTheme(getAutoTheme());
+  }
   syncBtn();
+
+  themeBtn.addEventListener('click', function () {
+    if (localStorage.getItem('wc-theme')) {
+      // Manual → back to auto
+      localStorage.removeItem('wc-theme');
+      applyAutoTheme();
+    } else {
+      // Auto → pin to opposite of current
+      var forced = isDarkActive() ? 'light' : 'dark';
+      localStorage.setItem('wc-theme', forced);
+      applyTheme(forced);
+      syncBtn();
+    }
+  });
 
   var grid = document.getElementById('mz-grid');
   grid.addEventListener('mouseover', function(e) {
