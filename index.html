@@ -8,122 +8,161 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="World Clock">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #f5f4f0;
-    --surface: #ffffff;
-    --surface2: #f0eeea;
-    --border: rgba(0,0,0,0.10);
-    --border-strong: rgba(0,0,0,0.18);
-    --text: #1a1a1a;
-    --text2: #666;
-    --text3: #999;
-    --work-bg: #E6F1FB;
-    --work-border: #B5D4F4;
-    --work-text: #0C447C;
-    --work-ap: #185FA5;
-    --cur-bg: #FAEEDA;
-    --cur-border: #EF9F27;
-    --cur-text: #854F0B;
-    --cur-ap: #BA7517;
-    --radius: 8px;
-    --radius-sm: 5px;
-    --mono: 'SF Mono', 'Menlo', 'Monaco', monospace;
-    --sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    --bg:           #f1f5f9;
+    --surface:      #ffffff;
+    --surface-2:    #f8fafc;
+    --border:       #e2e8f0;
+    --border-strong:#cbd5e1;
+    --text-1:       #1e293b;
+    --text-2:       #64748b;
+    --text-3:       #94a3b8;
+    --header-bg:    #1e293b;
+    --header-text:  rgba(255,255,255,0.88);
+    --header-text-2:rgba(255,255,255,0.5);
+    --header-btn-bg:rgba(255,255,255,0.07);
+    --header-btn-hv:rgba(255,255,255,0.13);
+    --work-bg:      rgba(119,130,214,0.12);
+    --work-border:  rgba(119,130,214,0.30);
+    --work-text:    #6571c1;
+    --work-ap:      #7782d6;
+    --cur-bg:       rgba(217,164,92,0.15);
+    --cur-border:   rgba(217,164,92,0.45);
+    --cur-text:     #a07030;
+    --cur-ap:       #d9a45c;
+    --r-sm:         8px;
+    --r-md:         12px;
+    --r-lg:         16px;
+    --shadow-sm:    0 1px 2px rgba(15,23,42,.05);
+    --shadow-md:    0 4px 6px -1px rgba(15,23,42,.07), 0 2px 4px -2px rgba(15,23,42,.05);
+    --mono:         'SF Mono', 'Menlo', 'Monaco', monospace;
+    --sans:         'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
   @media (prefers-color-scheme: dark) {
     html:not([data-theme="light"]) {
-      --bg: #161616;
-      --surface: #1f1f1f;
-      --surface2: #2a2a2a;
-      --border: rgba(255,255,255,0.09);
-      --border-strong: rgba(255,255,255,0.16);
-      --text: #e8e8e8;
-      --text2: #999;
-      --text3: #666;
-      --work-bg: #042C53;
-      --work-border: #0C447C;
-      --work-text: #B5D4F4;
-      --work-ap: #85B7EB;
-      --cur-bg: #412402;
-      --cur-border: #BA7517;
-      --cur-text: #FAC775;
-      --cur-ap: #EF9F27;
+      --bg:           #0b1220;
+      --surface:      #131c2e;
+      --surface-2:    #182238;
+      --border:       #232f48;
+      --border-strong:#2d3b58;
+      --text-1:       #e2e8f0;
+      --text-2:       #94a3b8;
+      --text-3:       #64748b;
+      --header-bg:    #0a111e;
+      --header-btn-bg:rgba(255,255,255,0.05);
+      --header-btn-hv:rgba(255,255,255,0.1);
+      --work-bg:      rgba(138,147,220,0.12);
+      --work-border:  rgba(138,147,220,0.25);
+      --work-text:    #aab0e2;
+      --work-ap:      #8a93dc;
+      --cur-bg:       rgba(224,178,116,0.12);
+      --cur-border:   rgba(224,178,116,0.35);
+      --cur-text:     #e8b497;
+      --cur-ap:       #e0b274;
+      --shadow-sm:    0 1px 2px rgba(0,0,0,.3);
+      --shadow-md:    0 4px 6px -1px rgba(0,0,0,.35), 0 2px 4px -2px rgba(0,0,0,.3);
     }
   }
 
   html[data-theme="dark"] {
-    --bg: #161616;
-    --surface: #1f1f1f;
-    --surface2: #2a2a2a;
-    --border: rgba(255,255,255,0.09);
-    --border-strong: rgba(255,255,255,0.16);
-    --text: #e8e8e8;
-    --text2: #999;
-    --text3: #666;
-    --work-bg: #042C53;
-    --work-border: #0C447C;
-    --work-text: #B5D4F4;
-    --work-ap: #85B7EB;
-    --cur-bg: #412402;
-    --cur-border: #BA7517;
-    --cur-text: #FAC775;
-    --cur-ap: #EF9F27;
+    --bg:           #0b1220;
+    --surface:      #131c2e;
+    --surface-2:    #182238;
+    --border:       #232f48;
+    --border-strong:#2d3b58;
+    --text-1:       #e2e8f0;
+    --text-2:       #94a3b8;
+    --text-3:       #64748b;
+    --header-bg:    #0a111e;
+    --header-btn-bg:rgba(255,255,255,0.05);
+    --header-btn-hv:rgba(255,255,255,0.1);
+    --work-bg:      rgba(138,147,220,0.12);
+    --work-border:  rgba(138,147,220,0.25);
+    --work-text:    #aab0e2;
+    --work-ap:      #8a93dc;
+    --cur-bg:       rgba(224,178,116,0.12);
+    --cur-border:   rgba(224,178,116,0.35);
+    --cur-text:     #e8b497;
+    --cur-ap:       #e0b274;
+    --shadow-sm:    0 1px 2px rgba(0,0,0,.3);
+    --shadow-md:    0 4px 6px -1px rgba(0,0,0,.35), 0 2px 4px -2px rgba(0,0,0,.3);
   }
 
   body {
-    background: var(--bg);
-    color: var(--text);
     font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text-1);
     min-height: 100vh;
-    padding: 20px 16px 24px;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .2s ease, color .2s ease;
   }
 
-  .title-bar {
+  /* ── Header ── */
+  header {
+    background: var(--header-bg);
+    padding: 0 24px;
+    height: 52px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: background-color .2s ease;
   }
-
-  h1.title {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text3);
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    margin-bottom: 0;
-  }
-
-  #theme-toggle {
-    background: var(--surface2);
-    border: 0.5px solid var(--border-strong);
-    border-radius: var(--radius-sm);
-    color: var(--text2);
-    cursor: pointer;
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .header-left h1 {
     font-size: 14px;
-    padding: 4px 8px;
-    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--header-text);
   }
-  #theme-toggle:hover { background: var(--surface); }
+  .header-updated {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--header-text-2);
+    font-family: var(--mono);
+  }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  #theme-toggle {
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    border: none;
+    background: var(--header-btn-bg);
+    color: var(--header-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    transition: background-color .15s ease;
+    padding: 0;
+  }
+  #theme-toggle:hover { background: var(--header-btn-hv); }
 
+  /* ── Grid container ── */
   #mz-scroll {
     overflow-x: auto;
-    padding-bottom: 6px;
+    padding: 20px 24px 8px;
     -webkit-overflow-scrolling: touch;
   }
-  #mz-scroll::-webkit-scrollbar { height: 3px; }
+  #mz-scroll::-webkit-scrollbar { height: 4px; }
   #mz-scroll::-webkit-scrollbar-track { background: transparent; }
   #mz-scroll::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
 
   #mz-grid {
     display: grid;
-    grid-template-columns: 148px repeat(24, 40px);
-    gap: 2px;
-    row-gap: 4px;
+    grid-template-columns: 160px repeat(24, 42px);
+    gap: 3px;
+    row-gap: 6px;
     min-width: max-content;
   }
 
@@ -131,90 +170,179 @@
     grid-column: 1 / -1;
     height: 1px;
     background: var(--border);
-    margin: 3px 0;
+    margin: 4px 0;
+    transition: background-color .2s ease;
   }
 
-  /* Info cell */
+  /* ── Info cell (timezone label) ── */
   .ic {
     background: var(--surface);
-    border: 0.5px solid var(--border-strong);
-    border-radius: var(--radius);
-    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 8px 12px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 1px;
+    gap: 2px;
     position: sticky;
     left: 0;
     z-index: 2;
+    box-shadow: var(--shadow-sm);
+    transition: background-color .2s ease, border-color .2s ease;
   }
-  .ic.home-row { border-color: var(--border-strong); }
-  .ic-name { font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .ic-meta { font-size: 10px; color: var(--text2); font-family: var(--mono); display: flex; align-items: center; gap: 5px; margin-top: 1px; }
-  .ic-offset { background: var(--surface2); border-radius: 3px; padding: 0 4px; font-size: 10px; color: var(--text2); }
-  .ic-time { font-size: 15px; font-family: var(--mono); font-weight: 500; color: var(--text); margin-top: 3px; }
+  .ic-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: -0.2px;
+  }
+  .ic-meta {
+    font-size: 10px;
+    color: var(--text-2);
+    font-family: var(--mono);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 1px;
+  }
+  .ic-offset {
+    background: var(--surface-2);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-3);
+    transition: background-color .2s ease;
+  }
+  .ic-time {
+    font-size: 16px;
+    font-family: var(--mono);
+    font-weight: 700;
+    color: var(--text-1);
+    margin-top: 3px;
+    letter-spacing: -0.5px;
+  }
 
-  /* Tiles */
+  /* ── Tiles ── */
   .tile {
-    border-radius: var(--radius-sm);
-    border: 0.5px solid var(--border);
+    border-radius: var(--r-sm);
+    border: 1px solid var(--border);
     padding: 6px 2px 5px;
     text-align: center;
-    background: var(--surface2);
+    background: var(--surface-2);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 52px;
+    min-height: 54px;
+    transition: background-color .2s ease, border-color .2s ease, opacity .2s ease;
   }
-  .tile.night { opacity: 0.4; }
+  .tile.night { opacity: 0.35; }
   .tile.work  { background: var(--work-bg); border-color: var(--work-border); }
-  .tile.cur   { background: var(--cur-bg);  border-color: var(--cur-border); opacity: 1 !important; }
-  .tile.col-hover { filter: brightness(1.25); border-color: rgba(0,0,0,0.5) !important; box-shadow: 0 0 0 1px rgba(0,0,0,0.18); opacity: 1 !important; position: relative; z-index: 1; }
+  .tile.cur   { background: var(--cur-bg);  border-color: var(--cur-border); opacity: 1 !important; box-shadow: 0 0 0 1px var(--cur-border); }
+  .tile.col-hover {
+    filter: brightness(1.2);
+    border-color: var(--border-strong) !important;
+    box-shadow: var(--shadow-md);
+    opacity: 1 !important;
+    position: relative;
+    z-index: 1;
+  }
 
-  .tile-h  { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--text); line-height: 1; display: block; }
-  .tile-ap { font-size: 9px; color: var(--text3); margin-top: 3px; display: block; letter-spacing: 0.03em; }
+  .tile-h {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-1);
+    line-height: 1;
+    display: block;
+    letter-spacing: -0.3px;
+  }
+  .tile-ap {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--text-3);
+    margin-top: 3px;
+    display: block;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
 
   .tile.work .tile-h  { color: var(--work-text); }
   .tile.work .tile-ap { color: var(--work-ap); }
-  .tile.cur  .tile-h  { color: var(--cur-text); }
+  .tile.cur  .tile-h  { color: var(--cur-text); font-weight: 800; }
   .tile.cur  .tile-ap { color: var(--cur-ap); }
 
   /* Date badge tile */
   .tile.date-t { padding: 5px 2px; }
-  .date-mon { font-size: 8px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); display: block; line-height: 1; }
-  .date-day { font-size: 15px; font-weight: 500; color: var(--text); display: block; line-height: 1.2; }
+  .date-mon {
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-1);
+    display: block;
+    line-height: 1;
+  }
+  .date-day {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-1);
+    display: block;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
   .tile.work  .date-mon, .tile.work  .date-day { color: var(--work-text); }
   .tile.cur   .date-mon, .tile.cur   .date-day { color: var(--cur-text); }
-  .tile.night .date-mon, .tile.night .date-day { color: var(--text2); }
+  .tile.night .date-mon, .tile.night .date-day { color: var(--text-3); }
 
-  /* Legend */
+  /* ── Legend ── */
   .legend {
     display: flex;
     flex-wrap: wrap;
-    gap: 14px;
-    margin-top: 16px;
-    padding-top: 12px;
-    border-top: 0.5px solid var(--border);
+    gap: 16px;
+    padding: 14px 24px 20px;
   }
-  .leg-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text2); }
-  .leg-sw { width: 18px; height: 9px; border-radius: 2px; border: 0.5px solid; flex-shrink: 0; }
-
-  .updated {
+  .leg-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
     font-size: 11px;
-    color: var(--text3);
+    font-weight: 500;
+    color: var(--text-2);
+  }
+  .leg-sw {
+    width: 20px;
+    height: 10px;
+    border-radius: 3px;
+    border: 1px solid;
+    flex-shrink: 0;
+  }
+  .leg-badge {
+    font-size: 10px;
     font-family: var(--mono);
-    margin-top: 10px;
-    text-align: right;
+    font-weight: 600;
+    border: 1px solid var(--border-strong);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--text-3);
   }
 </style>
 </head>
 <body>
 
-<div class="title-bar">
-  <h1 class="title">World Clock</h1>
-  <button id="theme-toggle">⏰</button>
-</div>
+<header>
+  <div class="header-left">
+    <h1>World Clock</h1>
+    <span class="header-updated" id="updated"></span>
+  </div>
+  <div class="header-right">
+    <button id="theme-toggle">⏰</button>
+  </div>
+</header>
 
 <div id="mz-scroll">
   <div id="mz-grid"></div>
@@ -222,20 +350,18 @@
 
 <div class="legend">
   <div class="leg-item">
-    <div class="leg-sw" style="background:#FAEEDA;border-color:#EF9F27;"></div>Current hour
+    <div class="leg-sw" style="background:var(--cur-bg);border-color:var(--cur-border);"></div>Current hour
   </div>
   <div class="leg-item">
-    <div class="leg-sw" style="background:#E6F1FB;border-color:#B5D4F4;"></div>Business hours (7am–6pm)
+    <div class="leg-sw" style="background:var(--work-bg);border-color:var(--work-border);"></div>Business hours (7am–6pm)
   </div>
   <div class="leg-item">
-    <div class="leg-sw" style="background:rgba(0,0,0,0.06);border-color:rgba(0,0,0,0.10);opacity:0.6;"></div>Night (9pm–6am)
+    <div class="leg-sw" style="background:var(--surface-2);border-color:var(--border);opacity:0.4;"></div>Night (9pm–6am)
   </div>
   <div class="leg-item">
-    <span style="font-size:10px;font-family:var(--mono);border:0.5px solid rgba(0,0,0,0.18);border-radius:3px;padding:0 4px;color:var(--text2);">APR</span>&nbsp;Midnight / day change
+    <span class="leg-badge">MAY</span>&nbsp;Midnight / day change
   </div>
 </div>
-
-<div class="updated" id="updated"></div>
 
 <script>
 (function () {
@@ -340,12 +466,12 @@
     document.getElementById('mz-grid').innerHTML = html;
 
     var scroll = document.getElementById('mz-scroll');
-    var tileW  = 42;
-    var infoW  = 150;
+    var tileW  = 45;
+    var infoW  = 163;
     scroll.scrollLeft = infoW + curCol * tileW - scroll.offsetWidth / 2 + tileW / 2;
 
     document.getElementById('updated').textContent =
-      'Updated ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
     applyTheme();
   }
@@ -356,7 +482,7 @@
   // Service worker — keeps the home screen app up to date
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').then(function(reg) {
-      reg.update(); // Check for a new SW version every time the app opens
+      reg.update();
     });
   }
 
@@ -368,7 +494,6 @@
     if (saved === 'light' || saved === 'dark') {
       document.documentElement.setAttribute('data-theme', saved);
     } else {
-      // Auto: Melbourne business hours (7am–6pm) = light, otherwise = dark
       var h = getHour(new Date(), 'Australia/Melbourne');
       document.documentElement.setAttribute('data-theme', (h >= 7 && h <= 17) ? 'light' : 'dark');
     }
