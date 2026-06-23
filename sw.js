@@ -1,4 +1,4 @@
-const CACHE = 'worldclock-v2';
+const CACHE = 'worldclock-v3';
 const ASSETS = ['./index.html', './icon.png'];
 
 // Pre-cache assets on install, activate immediately
