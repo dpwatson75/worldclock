@@ -60,8 +60,8 @@
       --header-btn-hv:rgba(255,255,255,0.1);
       --work-bg:      rgba(138,147,220,0.18);
       --work-border:  rgba(138,147,220,0.35);
-      --work-text:    #d0d4f0;
-      --work-ap:      #b0b8e8;
+      --work-text:    #e2e8f0;
+      --work-ap:      #e2e8f0;
       --cur-bg:       rgba(224,178,116,0.12);
       --cur-border:   rgba(224,178,116,0.35);
       --cur-text:     #e8b497;
@@ -273,6 +273,10 @@
 
   .tile.work .tile-h  { color: var(--work-text); }
   .tile.work .tile-ap { color: var(--work-ap); }
+  html[data-theme="dark"] .tile-h  { color: var(--text-2); }
+  html[data-theme="dark"] .tile-ap { color: var(--text-3); }
+  html[data-theme="dark"] .tile.work .tile-h  { color: var(--work-text); }
+  html[data-theme="dark"] .tile.work .tile-ap { color: var(--work-ap); }
   .tile.cur  .tile-h  { color: var(--cur-text); font-weight: 800; }
   .tile.cur  .tile-ap { color: var(--cur-ap); }
 
